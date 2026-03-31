@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gaux Professional Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#427cfc;--blue-light:#6b99fd;--blue-pale:#dae9ff;
+  --yellow:#fce7ae;--yellow-deep:#ffea00;
+  --cream:#fcf9f5;--white:#ffffff;
+  --dark:#1a1a2e;--dark-mid:#2d2d4a;
+  --mid:#5a5a7a;--muted:#9494b0;
+  --border:#e8e4f0;--border-light:#f0ecf8;
+  --gold:#c4922a;--gold-pale:#fff1de;
+}
+body{font-family:'Kumbh Sans',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;-webkit-font-smoothing:antialiased;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes drift{
+  0%  {transform:translate(0px,0px) scale(1);}
+  20% {transform:translate(30px,-25px) scale(1.07);}
+  40% {transform:translate(-22px,38px) scale(.93);}
+  60% {transform:translate(42px,18px) scale(1.05);}
+  80% {transform:translate(-18px,-32px) scale(1.09);}
+  100%{transform:translate(0px,0px) scale(1);}
+}
+@keyframes heroFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ── */
+.hero{
+  background:#427cfc;
+  padding:5.5rem 2rem 5rem;
+  position:relative;overflow:hidden;
+  min-height:460px;display:flex;align-items:center;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 600px 400px at 85% 50%, rgba(255,255,255,.12) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 500px at 0% 100%, rgba(0,0,20,.2) 0%, transparent 60%),
+    radial-gradient(ellipse 300px 300px at 100% 0%, rgba(255,255,255,.08) 0%, transparent 50%);
+}
+.hero-inner{position:relative;z-index:1;max-width:1320px;margin:0 auto;width:100%;}
+.hero-main{display:flex;align-items:center;gap:5rem;}
+.hero-left{flex:1;min-width:0;}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,5vw,4.6rem);
+  font-weight:700;color:#fff;
+  line-height:1.08;letter-spacing:-.025em;
+}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--yellow);}
+.hero-divider{
+  width:1px;align-self:stretch;min-height:180px;
+  background:rgba(255,255,255,.25);flex-shrink:0;
+}
+.hero-right{flex:1;}
+.hero-sub{
+  font-family:'Kumbh Sans',sans-serif;
+  font-size:1.15rem;font-style:normal;font-weight:300;
+  color:rgba(255,255,255,.85);
+  line-height:1.85;max-width:420px;
+  margin-bottom:2rem;
+}
+.hero-cycle-wrap{
+  display:flex;align-items:center;gap:.85rem;
+  max-width:420px;
+}
+.hero-cycle-label{
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);font-weight:600;white-space:nowrap;
+  font-family:'Kumbh Sans',sans-serif;
+}
+.hero-cycle-track{
+  position:relative;height:2rem;flex:1;overflow:hidden;
+}
+.hero-cycle-word{
+  position:absolute;top:0;left:0;
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem;font-weight:600;font-style:italic;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .6s ease, transform .6s ease;
+  white-space:nowrap;
+}
+.hero-cycle-word.active{
+  opacity:1;
+  transform:translateY(0);
+}
+.hero-cycle-word.exit{
+  opacity:0;
+  transform:translateY(-10px);
+  transition:opacity .4s ease, transform .4s ease;
+}
+
+/* ── CONTROLS ── */
+.controls{background:var(--white);border-bottom:1px solid var(--border);padding:1.1rem 2rem;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(66,124,252,.07);}
+.controls-inner{max-width:1320px;margin:0 auto;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.search-wrap{flex:1 1 240px;position:relative;}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+.search-wrap input{width:100%;padding:.68rem 1rem .68rem 2.75rem;border:1.5px solid var(--border);border-radius:50px;font-family:'Kumbh Sans',sans-serif;font-size:.9rem;background:var(--cream);color:var(--dark);outline:none;transition:all .2s;}
+.search-wrap input:focus{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(66,124,252,.1);}
+.filter-select{padding:.68rem 1rem;border:1.5px solid var(--border);border-radius:50px;font-family:'Kumbh Sans',sans-serif;font-size:.84rem;font-weight:500;background:var(--cream);color:var(--dark);outline:none;cursor:pointer;min-width:138px;transition:all .2s;}
+.filter-select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(66,124,252,.1);}
+.view-toggle{display:flex;gap:3px;background:var(--cream);border:1.5px solid var(--border);border-radius:50px;padding:3px;}
+.vbtn{width:33px;height:33px;border:none;border-radius:50px;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .18s;}
+.vbtn.active{background:var(--blue);color:#fff;}
+
+/* ── DIRECTORY ── */
+.directory{max-width:1320px;margin:0 auto;padding:2.5rem 2rem;}
+.cat-legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;}
+.cat-legend-item{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:500;color:var(--mid);background:var(--white);border:1px solid var(--border);border-radius:50px;padding:.25rem .7rem;cursor:pointer;transition:all .18s;}
+.cat-legend-item:hover{border-color:var(--blue);color:var(--blue);}
+.cat-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:1.25rem;}
+.grid.list-mode{grid-template-columns:1fr;}
+
+/* ── CARD ── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:22px;overflow:hidden;cursor:pointer;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;animation:fadeUp .35s ease both;display:flex;flex-direction:column;}
+.card:hover{transform:translateY(-6px);box-shadow:0 22px 60px rgba(66,124,252,.13);border-color:var(--blue-light);}
+.card.featured{border-color:rgba(252,231,174,.6);}
+.card.featured:hover{border-color:#fce7ae;box-shadow:0 22px 60px rgba(252,231,174,.2);}
+
+/* headshot top */
+.card-photo{height:340px;position:relative;overflow:hidden;background:linear-gradient(135deg,#e8e4f0,#d0cce8);flex-shrink:0;}
+.card-photo-img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .35s ease;}
+.card:hover .card-photo-img{transform:scale(1.04);}
+.card-photo-initials{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:700;color:rgba(255,255,255,.6);}
+.featured-star{position:absolute;top:10px;right:10px;z-index:2;width:32px;height:32px;border-radius:50%;background:#fce7ae;color:#427cfc;display:flex;align-items:center;justify-content:center;font-size:1rem;line-height:1;box-shadow:0 2px 10px rgba(252,231,174,.5);}
+.card-cat-bar{position:absolute;bottom:0;left:0;right:0;height:4px;}
+
+.card-body{padding:1.25rem 1.35rem 1.4rem;flex:1;display:flex;flex-direction:column;}
+.card-cat-line{height:3px;width:40px;border-radius:2px;margin-bottom:.5rem;}
+.card-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--dark);line-height:1.2;margin-bottom:.25rem;}
+.card-creds{font-size:.8rem;font-weight:600;line-height:1.4;margin-bottom:.3rem;}
+.card-tagline{font-size:.85rem;color:var(--mid);line-height:1.6;font-style:italic;margin-bottom:.85rem;}
+.card-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.85rem;}
+.tag{font-size:.72rem;font-weight:600;padding:.25rem .7rem;border-radius:50px;letter-spacing:.02em;}
+.tag-spec{background:#f0f0fa;color:var(--dark-mid);}
+.tag-virtual-yes{background:#e6f9f0;color:#1a7a4a;}
+.tag-virtual-no{background:#fef0f0;color:#c0392b;}
+.card-footer{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;padding-top:.8rem;border-top:1px solid var(--border-light);margin-top:auto;}
+.meta-pill{display:inline-flex;align-items:center;gap:.28rem;font-size:.74rem;color:var(--muted);font-weight:500;background:var(--cream);border:1px solid var(--border-light);border-radius:50px;padding:.18rem .55rem;}
+.card-action-btns{margin-left:auto;}
+.icon-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--cream);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;color:var(--muted);}
+.icon-btn:hover{background:var(--blue);border-color:var(--blue);color:#fff;}
+.card-res-btn{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.67rem;font-weight:600;
+  color:var(--blue);background:var(--blue-pale);
+  border:1px solid rgba(66,124,252,.25);
+  border-radius:50px;padding:.2rem .65rem;
+  text-decoration:none;transition:all .18s;
+  font-family:'Kumbh Sans',sans-serif;
+}
+.card-res-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+/* list mode */
+.list-mode .card{flex-direction:row;}
+.list-mode .card-photo{width:110px;height:auto;min-height:110px;flex-shrink:0;border-radius:0;}
+.list-mode .card-photo-initials{font-size:2rem;}
+.list-mode .card-body{padding:.9rem 1.1rem;flex-direction:row;align-items:center;gap:1rem;flex-wrap:wrap;}
+.list-mode .card-cat-line{display:none;}
+.list-mode .card-tagline{display:none;}
+.list-mode .card-tags{margin-bottom:0;}
+.list-mode .card-footer{border-top:none;padding-top:0;margin-top:0;flex-shrink:0;}
+.list-mode .card-cat-bar{display:none;}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;z-index:1000;background:rgba(10,10,30,.65);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .28s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--white);border-radius:24px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;transform:translateY(24px) scale(.97);transition:transform .32s cubic-bezier(.34,1.56,.64,1);scrollbar-width:thin;}
+.overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-hero{position:relative;height:240px;overflow:hidden;display:flex;align-items:flex-end;background:#427cfc;}
+.modal-logo-bg{position:absolute;inset:-20px;background-size:cover;background-position:center;filter:blur(16px) brightness(.22) saturate(1.8);transform:scale(1.2);}
+.modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(66,124,252,.7) 0%,rgba(66,124,252,.2) 100%);}
+.modal-close{position:absolute;top:1rem;right:1rem;z-index:10;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:rgba(255,255,255,.9);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .18s;}
+.modal-close:hover{background:rgba(255,255,255,.25);}
+.modal-feat-badge{position:absolute;top:1rem;left:1rem;z-index:10;display:inline-flex;align-items:center;gap:.35rem;background:#fce7ae;color:#427cfc;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .8rem;border-radius:50px;}
+.modal-logo-display{position:absolute;top:1rem;right:4rem;z-index:5;max-height:40px;max-width:110px;object-fit:contain;filter:brightness(1.2) drop-shadow(0 2px 8px rgba(0,0,0,.4));opacity:.85;}
+.modal-hero-info{position:relative;z-index:5;padding:0 1.75rem 1.5rem;width:100%;}
+.modal-cat-line{height:3px;width:50px;border-radius:2px;margin-bottom:.5rem;}
+.modal-name{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:#fff;margin-bottom:.25rem;line-height:1.15;}
+.modal-creds{font-size:.82rem;color:rgba(255,255,255,.6);font-weight:400;margin-bottom:.2rem;}
+.modal-tagline{font-size:.84rem;color:rgba(255,255,255,.5);font-style:italic;}
+.modal-body{padding:1.75rem;background:#fcf9f5;}
+.msec{margin-bottom:1.5rem;}
+.mlabel{font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;}
+.mtext{font-size:.875rem;color:var(--mid);line-height:1.8;white-space:pre-line;}
+.modal-tags{display:flex;flex-wrap:wrap;gap:.45rem;}
+.modal-pills{display:flex;flex-wrap:wrap;gap:.5rem;}
+.mpill{display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;font-weight:500;padding:.4rem .9rem;border-radius:50px;border:1.5px solid var(--border);color:var(--mid);text-decoration:none;background:var(--cream);transition:all .18s;}
+.mpill:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-pale);}
+.modal-footer{padding:1.25rem 1.75rem;border-top:1px solid var(--border);display:flex;gap:.75rem;flex-wrap:wrap;}
+.btn-primary{flex:1;padding:.9rem 1.5rem;background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;border:none;border-radius:50px;font-family:'Kumbh Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:opacity .18s;}
+.btn-primary:hover{opacity:.88;}
+.btn-secondary{flex:1;padding:.9rem 1.5rem;background:transparent;color:var(--blue);border:2px solid var(--blue);border-radius:50px;font-family:'Kumbh Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .18s;}
+.btn-secondary:hover{background:var(--blue-pale);}
+.state-box{text-align:center;padding:5rem 2rem;color:var(--muted);}
+.state-box h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--mid);margin-bottom:.5rem;}
+
+@media(max-width:768px){
+  .hero{padding:3.5rem 1.5rem 3rem;min-height:unset;}
+  .hero-main{flex-direction:column;gap:1.5rem;align-items:flex-start;}
+  .hero-divider{display:none;}
+  .hero-right{display:block;width:100%;}
+  .hero-sub{font-size:1.1rem;max-width:100%;}
+  .hero-cycle-wrap{max-width:100%;}
+  .hero h1{font-size:clamp(2.2rem,7vw,3.2rem);}
+  .controls{padding:.85rem 1rem;}
+  .controls-inner{flex-direction:row;flex-wrap:wrap;gap:.5rem;}
+  .search-wrap{flex:1 1 100%;max-width:100%;}
+  .filter-select{flex:1 1 calc(50% - .4rem);max-width:calc(50% - .4rem);min-width:unset;font-size:.75rem;padding:.6rem .5rem;}
+  .view-toggle{margin-left:auto;}
+  .directory{padding:1rem;}
+  .grid{grid-template-columns:repeat(2,1fr);gap:.85rem;}
+  .cat-legend{display:none;}
+  .card-photo{height:340px;}
+  .card-body{padding:1rem 1rem 1.1rem;}
+  .card-name{font-size:1rem;}
+  .card-tagline{display:none;}
+  /* Modal - NOT full screen, centered with margin */
+  .overlay{padding:1.25rem;align-items:center;}
+  .modal{max-height:88vh;border-radius:20px;width:100%;max-width:520px;}
+  .modal-hero{height:190px;}
+  .modal-body,.modal-footer{padding:1.1rem 1.25rem;}
+  .modal-hero-info{padding:0 1.25rem 1.1rem;}
+  .modal-name{font-size:1.5rem;}
+  .list-mode .card{flex-direction:column;}
+  .list-mode .card-photo{width:100%;height:280px;}
+  .btn-primary,.btn-secondary{font-size:.82rem;padding:.75rem 1rem;}
+}
+@media(max-width:480px){
+  .hero{padding:2.5rem 1.1rem 2.5rem;}
+  .hero h1{font-size:2rem;}
+  .grid{grid-template-columns:repeat(2,1fr);gap:.75rem;}
+  .card-photo{height:300px;}
+  .filter-select{flex:1 1 calc(50% - .4rem);max-width:calc(50% - .4rem);font-size:.75rem;padding:.6rem .5rem;}
+  .overlay{padding:1rem;align-items:center;}
+  .modal{border-radius:18px;max-height:90vh;max-width:100%;}
+  .modal-footer{flex-direction:column;}
+  .btn-primary,.btn-secondary{flex:unset;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-main">
+      <div class="hero-left">
+        <h1>Find the care that<br/>will always be<br/><em>there for you.</em></h1>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-right">
+        <p class="hero-sub">Support across pregnancy, parenting, and everyday life from trusted experts who actually understand how you live.</p>
+        <div class="hero-cycle-wrap">
+          <span class="hero-cycle-label">Specializing in</span>
+          <div class="hero-cycle-track" id="cycle-track">
+            <span class="hero-cycle-word active" style="color:#ffb1d2">Pregnancy &amp; Birth</span>
+            <span class="hero-cycle-word" style="color:#c4b5fd">Mental Health</span>
+            <span class="hero-cycle-word" style="color:#6ee7d4">Infant Development</span>
+            <span class="hero-cycle-word" style="color:#93c5fd">Medical &amp; Clinical</span>
+            <span class="hero-cycle-word" style="color:#86efac">Feeding &amp; Nutrition</span>
+            <span class="hero-cycle-word" style="color:#fdba74">Family Support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search-wrap">
+      <svg class="search-icon" width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10 10L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input type="text" id="search" placeholder="Search name, specialty, location…"/>
+    </div>
+    <select class="filter-select" id="f-category"><option value="">All Categories</option></select>
+    <select class="filter-select" id="f-specialty"><option value="">All Specialties</option></select>
+    <select class="filter-select" id="f-location"><option value="">All Locations</option></select>
+    <select class="filter-select" id="f-virtual"><option value="">Virtual Appts</option><option value="yes">Accepts Virtual</option><option value="no">In-Person Only</option></select>
+    <div class="view-toggle">
+      <button class="vbtn active" id="btn-grid" title="Grid"><svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><rect x="0" y="0" width="5.5" height="5.5" rx="1"/><rect x="7.5" y="0" width="5.5" height="5.5" rx="1"/><rect x="0" y="7.5" width="5.5" height="5.5" rx="1"/><rect x="7.5" y="7.5" width="5.5" height="5.5" rx="1"/></svg></button>
+      <button class="vbtn" id="btn-list" title="List"><svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><rect x="0" y="0" width="13" height="2" rx="1"/><rect x="0" y="5.5" width="13" height="2" rx="1"/><rect x="0" y="11" width="13" height="2" rx="1"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECTORY -->
+<div class="directory">
+  <div class="cat-legend" id="cat-legend"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-hero">
+      <div class="modal-logo-bg" id="m-logo-bg"></div>
+      <div class="modal-hero-overlay"></div>
+      <button class="modal-close" id="mclose">✕</button>
+      <div id="m-feat"></div>
+      <img class="modal-logo-display" id="m-logo-display" src="" alt="" style="display:none"/>
+      <div class="modal-hero-info">
+        <div class="modal-cat-line" id="m-cat-line"></div>
+        <div class="modal-name" id="m-name"></div>
+        <div class="modal-creds" id="m-creds"></div>
+        <div class="modal-tagline" id="m-tagline"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="msec" id="m-bio-sec"><div class="mlabel">About</div><div class="mtext" id="m-bio"></div></div>
+      <div class="msec" id="m-cat-sec"><div class="mlabel">Category</div><div class="modal-tags" id="m-cat"></div></div>
+      <div class="msec" id="m-spec-sec"><div class="mlabel">Specialties</div><div class="modal-tags" id="m-spec"></div></div>
+      <div class="msec" id="m-details-sec"><div class="mlabel">Details</div><div class="modal-pills" id="m-details"></div></div>
+      <div class="msec" id="m-links-sec" style="display:none"><div class="mlabel">Links &amp; Social</div><div class="modal-pills" id="m-links"></div></div>
+    </div>
+    <div class="modal-footer" id="m-footer">
+      <button class="btn-primary" id="m-resources-btn" style="display:none" target="_blank">View Resources</button>
+      <button class="btn-secondary" id="m-email" style="display:none">Send Email</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var CAT_COLORS = {
+  'Mental & Emotional Health':        {color:'#8556e4',pale:'#f0ebfd',text:'#5a2db8'},
+  'Pregnancy, Birth & Postpartum':    {color:'#ff533b',pale:'#fff0ee',text:'#c0392b'},
+  'Infant & Child Development':       {color:'#008680',pale:'#e0f5f5',text:'#005a57'},
+  'Medical & Clinical':               {color:'#427cfc',pale:'#dae9ff',text:'#1a5acc'},
+  'Feeding & Nutrition':              {color:'#13a600',pale:'#e8f9e6',text:'#0a7000'},
+  'Whole Family & Systems Support':   {color:'#ff8100',pale:'#fff3e6',text:'#c05800'},
+  'Other':                            {color:'#c4922a',pale:'#fff1de',text:'#8a6010'},
+};
+function catColor(cat){return CAT_COLORS[cat]||{color:'#9494b0',pale:'#f5f5fa',text:'#5a5a7a'};}
+
+var bgPalette=['#427cfc','#8556e4','#008680','#ff533b','#13a600','#ff8100','#5c0c3f'];
+var listMode=false;
+
+function avatarBg(n){var h=(n||'').split('').reduce(function(a,c){return a+c.charCodeAt(0);},0);return bgPalette[h%bgPalette.length];}
+function initials(n){return(n||'?').split(' ').slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase();}
+function toArr(v){if(!v)return[];if(Array.isArray(v))return v.filter(Boolean);return String(v).split(',').map(function(s){return s.trim();}).filter(Boolean);}
+
+var MEMBERS = [
+  {tier:'featured',name:'Anne Nasson',creds:'Pediatric Occupational Therapist, MS, OTR/L',tagline:'Empowering new moms to confidently support their baby\'s motor and sensory development.',bio:'Anne Nasson, MS, OTR/L, is a licensed pediatric occupational therapist with over 15 years of experience specializing in infant and toddler development.\n\nShe empowers new moms with simple, effective strategies to support their child\'s motor milestones—from tummy time and rolling to crawling, grasp development, and first steps.\n\nAnne offers 1:1 parent coaching, providing personalized support and hands-on guidance to help new moms navigate their baby\'s development with clarity and confidence.',category:'Infant & Child Development',specialty:'Pediatric Occupational Therapist',website:'https://otskills4kids.com',social:'https://www.instagram.com/otskills4kids',email:'otskills4kids@gmail.com',virtual:'yes',resources:'https://otskills4kids.com'},
+  {tier:'featured',name:'AMK Counseling',creds:'Counselors/Therapists, LCSW/LCPC/LSW/LPC',tagline:'Helping women navigate emotional and mental health challenges with clarity and personalized care.',bio:'At AMK Counseling, we provide compassionate, tailored support for women navigating life\'s unique emotional and mental health challenges.\n\nWe also have specialized therapists who understand that the journey through pregnancy, childbirth, and early parenthood can be one of the most beautiful yet challenging experiences in a woman\'s life.\n\nSince 2011 AMK has been providing the gold standard in counseling.',category:'Mental & Emotional Health',specialty:'Perinatal & Postpartum Mental Health Certified',website:'https://www.amkcounseling.com',social:'https://www.instagram.com/amk_counseling/',email:'abbie@amkcounseling.com',virtual:'yes'},
+  {tier:'featured',name:'Leilani Songer',creds:'IBCLC, Birth and Postpartum Doula',tagline:'Compassionate, evidence-based lactation and wellness support from pregnancy through postpartum.',bio:'Leilani Songer, IBCLC is an International Board-Certified Lactation Consultant, doula, and founder of Breastfeeding Fixers & Leilani\'s Wellness Center, serving families in California, Colorado, Texas and offers virtual support worldwide.\n\nHer approach blends evidence-based care with a whole-family wellness philosophy, offering parents compassionate guidance through pregnancy, birth, and the postpartum transition.\n\nShe offers private lactation consultations, postpartum doula support, educational workshops, and online programs.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula, Birth Advocate/Perinatal Advocate',website:'https://breastfeedingfixers.com',social:'https://www.instagram.com/breastfeedingfixers\nhttps://www.facebook.com/breastfeedingfixers',email:'info@breastfeedingfixers.com',virtual:'yes',resources:'https://breastfeedingfixers.com'},
+  {tier:'featured',name:'Angela Fishman, PT',creds:'Pelvic Physical Therapist',tagline:'Birth preparation, postpartum recovery, and lifelong pelvic floor support for women.',bio:'Angela Fishman, PT, is a licensed pelvic health physical therapist and founder of My Pelvic Therapy, a virtual pelvic floor physical therapy practice.\n\nShe specializes in pregnancy and postpartum care, bladder leaks, urgency and frequency, pelvic pain, pain with intimacy, and core recovery.\n\nAngela provides 1:1 virtual pelvic floor physical therapy and online programs to support women through pregnancy preparation and postpartum recovery.',category:'Pregnancy, Birth & Postpartum',specialty:'Pelvic Health Specialist (Pelvic Floor PT)',website:'https://mypelvictherapy.com',social:'https://www.instagram.com/mypelvictherapy\nhttps://www.facebook.com/mypelvictherapy',email:'angela@mypelvictherapy.com',virtual:'yes',resources:'https://mypelvictherapy.com'},
+  {tier:'featured',name:'Sarah Giove',creds:'Birth & Postpartum Doula',tagline:'Trusted, compassionate advocacy from labor through the fourth trimester.',bio:'I love supporting expectant parents with encouragement, resources, and advocacy. I\'m passionate about protecting families during their most vulnerable moments, reducing unnecessary interventions, and safeguarding that sacred transition as babies enter the world.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula, Birth Advocate/Perinatal Advocate',website:'https://GentleBirthWithSarah.com',social:'https://www.instagram.com/GentleBirthWithSarah',email:'GentleBirthSarah@gmail.com',virtual:'no',resources:'https://GentleBirthWithSarah.com'},
+  {tier:'featured',name:'Carina E. Lane',creds:'MS.Ed, MSW, LSW, IECMH, DT, PMH-C',tagline:'Perinatal mental health education and guidance in understanding children\'s communication.',bio:'Carina has dedicated the past 20 years to supporting children and families in a variety of settings — including health care, high-quality dual language early childhood programs, and child welfare in Illinois.\n\nShe is a bilingual and bicultural licensed social worker in both Illinois and Indiana and currently works part-time in a private practice specializing in perinatal mental health.\n\nMindfulstarts was founded as a way to bridge her experience in both the perinatal and early childhood fields.',category:'Mental & Emotional Health',specialty:'Perinatal & Postpartum Mental Health Certified',website:'https://www.mindfulstarts.com',social:'@mindfulstarts (Instagram + TikTok)',email:'carina@mindfulstarts.com',virtual:'yes'},
+  {tier:'featured',name:'Meagan O\'Neill',creds:'Pediatric Physical Therapist and Certified Infant Massage Coach',tagline:'Pediatric physical therapist since 2004, supporting children\'s growth while empowering families.',resources:'https://www.ahoybaby.com/category/all-products',bio:'I earned my Bachelor of Science in Psychology and Master of Science in Physical Therapy from Sacred Heart University and have been practicing pediatric physical therapy since 2004.\n\nIn 2020, I became a children\'s yoga teacher through Kidding Around Yoga and a Certified Infant Massage Coach.\n\nI genuinely enjoy partnering with families, empowering them with knowledge, and helping them make informed decisions to support their child\'s development.',category:'Infant & Child Development',specialty:'Pediatric Physical Therapist',website:'https://www.ahoybaby.com',social:'Instagram/Facebook: Ahoybabypt',email:'meagan@ahoybaby.com',location:'Ipswich, MA',virtual:'yes'},
+  {tier:'featured',name:'Yewande Banire',creds:'APRN, FNP-C, MSN Ed.',tagline:'Functional medicine practitioner supporting women\'s hormonal and metabolic health.',bio:'I practice functional medicine with women across the lifespan, supporting hormonal and metabolic health through pregnancy, postpartum, perimenopause, and menopause.\n\nI work with women experiencing hormone imbalance, gut and digestive issues, thyroid concerns, weight changes, and mood symptoms including postpartum depression.\n\nMy approach includes advanced testing and therapies such as GI mapping, hormone replacement therapy, thyroid optimization, and IV nutrient infusions.',category:'Medical & Clinical',specialty:'Functional Medicine Practitioner',website:'https://sereneiv.com/',social:'Instagram @rootcausebyserene',email:'info@sereneiv.com',virtual:'yes'},
+  {tier:'featured',name:'Katie Caddell',creds:'LCSW, PMH-C',tagline:'Perinatal mental health certified therapist specializing in care during pregnancy and postpartum.',bio:'The transitions to parenthood can bring up a wide range of feelings and emotions. Oftentimes anxiety, panic, ruminating thoughts, depression, and relationship struggles show up during the many transitions to parenthood.\n\nUsing evidence-based approaches such as ACT, CBT, DBT, and Mindfulness, we help individuals bring awareness to thoughts, feelings, and sensations that fuel their distress.\n\nI offer a free 20-minute consultation to better understand your needs.',category:'Mental & Emotional Health',specialty:'Perinatal & Postpartum Mental Health Certified',website:'https://sunrisecounselingwellness.com/',social:'https://www.instagram.com/sunrise_counseling_wellness/',email:'katie@sunrisecwc.com',virtual:'yes'},
+  {tier:'featured',name:'Rebecca Stiglitz',creds:'Postpartum Doula & Sleep Consultant',tagline:'Helping mothers and families rest and recover after the birth of their baby.',bio:'As a mom of 3, I know how important it is for parents to recover after the birth of their child whether it is your first or your fifth.\n\nI help parents understand their children\'s cries, show them best practices with sleep, and help them navigate the challenges that happen with every age.\n\nThis career of being a postpartum doula and sleep consultant has been everything I needed it to be.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula',website:'https://www.doularebeccastiglitz.com',social:'https://www.instagram.com/doula_rebecca_stiglitz/',email:'rebeccastiglitz@gmail.com',virtual:'yes'},
+  {tier:'featured',name:'Bryn Yozzo',creds:'Certified Labor and Postpartum Doula, Childbirth Educator, NICU Doula',tagline:'Postpartum doula, educator, and founder of New England Doula Support.',bio:'Bryn is the owner and founder of New England Doula Support, where she brings deep expertise, compassion, and a lifelong commitment to walking alongside families through pregnancy, birth, and the fourth trimester.\n\nShe holds a Bachelor of Science in Early Childhood Education and Human Development from Wheelock College and a Master\'s degree in Educational Leadership from Bank Street Graduate School of Education.\n\nBryn is proud to serve as faculty with New Horizons Training Network.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula, Lactation Counselor (IBCLC/CLE)',website:'https://www.nedoulasupport.com',social:'@newenglanddoulasupport',email:'bryn@nedoulasupport.com',virtual:'yes'},
+  {tier:'featured',name:'Priya Rednam Waldo',creds:'Licensed Perinatal Therapist and Coach, PMH-C LMSW MPH',tagline:'Empowering career-driven women to thrive on the transformative journey of motherhood.',bio:'Priya Rednam-Waldo is a licensed perinatal therapist and keynote speaker with credentials from Johns Hopkins University. She serves as a CEO, coach and holistic strategist for high-achieving, career-driven women navigating motherhood.\n\nA former U.S. Army Captain and West Point honors graduate, Priya founded and continues to lead Healing Home Counseling Group, an innovative perinatal and youth mental health practice.',category:'Mental & Emotional Health',specialty:'Perinatal & Postpartum Mental Health Certified',website:'https://www.priyarednamwald.com',social:'https://www.instagram.com/healinghomegroup\nhttps://www.linkedin.com/in/priyarednamwaldo/',email:'priya@healinghomegroup.com',virtual:'yes'},
+  {tier:'featured',name:'Lauren Ratliff, LCSW',creds:'Lauren Ratliff, LCSW, PMH-C',tagline:'Perinatal therapist and practice owner of Matrescence Therapy.',bio:'Lauren Ratliff is a licensed clinical social worker and the founder of Matrescence Therapy, a virtual practice dedicated to supporting women, parents, and couples across the reproductive and parenting lifespan.\n\nHer clinical focus includes fertility challenges, pregnancy and postpartum adjustment, parenting stress, relationship dynamics, and perimenopause.\n\nPrior to founding Matrescence Therapy, she worked at Northwestern Memorial Hospital\'s Prentice Women\'s Hospital.',category:'Mental & Emotional Health',specialty:'Licensed Clinical Social Worker (Perinatal / Family)',website:'https://www.matrescence-therapy.com',social:'@matrescence_therapy',email:'lauren.ratliff@matrescence-therapy.com',virtual:'yes'},
+  {tier:'featured',name:'Laura Weppler',creds:'Fertility Support Specialist, Fertility Doula, BSN, RN',tagline:'Fertility nurse and doula bridging the gap between fertility clinics and real-life patient support.',bio:'Laura Weppler, BSN, RN, is a fertility nurse and fertility doula who combines professional expertise with personal experience navigating infertility.\n\nProfessionally, Laura spent more than a decade working inside fertility clinics, where she guided patients through IVF, IUI, donor cycles, medication protocols, and treatment coordination.\n\nShe serves as a steady guide through a complex and emotionally demanding process so clients feel informed, supported, and less alone.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula, Fertility Nurse',website:'https://www.yourpocketfertilitynurse.com',social:'https://www.instagram.com/navigatingfertilitywithlaura\nhttps://www.tiktok.com/@navigatingfertility',email:'laura@yourpocketfertilitynurse.com',virtual:'yes',resources:'https://www.yourpocketfertilitynurse.com'},
+  {tier:'featured',name:'Khyati Desai-Seltzer',creds:'Certified Educator of Infant Massage',tagline:'Grounded guide who helps mothers connect to their intuition and their babies through sacred touch.',bio:'Khyati is the owner of Vyana Infant Massage LLC, where she teaches parents the art and science of massaging their babies, an ancient indigenous practice, for short and long term benefits addressing sleep, gas/colic, immunity, bonding, congestion, and growth.\n\nKhyati graduated from LSU with a Bachelors in Sociology and International Studies and from GMU with a Masters in Public Administration.\n\nKhyati is a digital nomad, exploring with her husband and two daughters.',category:'Infant & Child Development',specialty:'Infant Massage Educator',website:'https://www.vyanainfantmassage.com',social:'https://www.instagram.com/vyana.infantmassage/',email:'info@vyanainfantmassage.com',virtual:'yes',resources:'https://www.vyanainfantmassage.com'},
+  {tier:'featured',name:'Ariel Sernek, PT, DPT',creds:'Doctor of Physical Therapy, CAPP-Pelvic, Dry Needling Certified',resources:'https://corebloompt.com/',tagline:'Empathetic pelvic wellness care that builds personal strength and supports a lasting bloom.',bio:'At CoreBloom, we are dedicated to restoring pelvic wellness and building lasting strength through expert physical therapy, evidence-based treatments, and mindful movement.\n\nWe combine clinical excellence with personalized care—offering pelvic floor therapy and pelvic health coaching in a nurturing environment where healing begins at the core and blooms outward.\n\nI have been practicing for 8 years and have helped hundreds of men/women find solutions to their symptoms.',category:'Medical & Clinical',specialty:'Doctor of Physical Therapy',website:'https://www.corebloomtpt.com',social:'https://www.instagram.com/drariel_pelvicpt/',email:'corebloompt@gmail.com',virtual:'yes',resources:'https://www.corebloomtpt.com'},
+  {tier:'featured',name:'Dr. Quiara Smith, OTD, OTR/L, CEIM',creds:'Pediatric Pelvic Health Occupational Therapist',tagline:'Founder of the first boutique private pediatric pelvic health OT clinic in the US.',bio:'Dr. Quiara Smith has been practicing as an Occupational Therapist for over 15 years in both California and Hawaii.\n\nHer private practice, Aloha Integrative Therapy, exclusively treats children and adolescents with pelvic floor dysfunction and toileting challenges.\n\nDr. Smith utilizes a holistic and integrative approach and partners with her canine assistant, Nelly, in guiding children toward continence with confidence.',category:'Infant & Child Development',specialty:'Pediatric Occupational Therapist',website:'https://www.alohaintegrativetherapy.com',social:'https://www.instagram.com/alohaintegrativetherapy',email:'quiara@alohaintegrativetherapy.com',virtual:'yes',resources:'https://www.tinyhood.com/classes/pre-potty-training'},
+  {tier:'featured',name:'Dr. Kate Uttech, PT, DPT, WCS',creds:'Pelvic Health and Perinatal Physical Therapist',tagline:'Prenatal, postpartum, and pelvic health specialists helping you prepare for birth and recover.',bio:'Dr. Kate Uttech is the owner and founder of New Journey Physical Therapy, where she specializes in pelvic floor and perinatal physical therapy.\n\nShe is passionate about supporting individuals through pregnancy, postpartum recovery, and all stages of pelvic health with compassionate, evidence-based care.\n\nAt New Journey Physical Therapy, her mission is to walk alongside patients during some of life\'s most important transitions.',category:'Pregnancy, Birth & Postpartum',specialty:'Pelvic Health Specialist (Pelvic Floor PT)',location:'Highland Park, IL',website:'https://www.newjourneypt.com',social:'@newjourneypt',email:'kateuttech@newjourneypt.com',virtual:'yes'},
+  {tier:'featured',name:'Kristin Revere, MM, CED, NCS',creds:'Elite Certified Birth and Postpartum Doula, Newborn Care Specialist',tagline:'Doula Agency Owner and Author.',bio:'Kristin Revere is the owner and founder of Gold Coast Doulas in Grand Rapids, Michigan. She is an elite certified birth doula, a newborn care specialist, a childbirth educator, and an elite certified postpartum doula.\n\nShe is the co-author of "Supported: Your Guide to Birth and Baby" and host of Ask the Doulas.\n\nShe is a mom of two and a bonus mom to one.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula',location:'Grand Rapids, MI',website:'https://www.goldcoastdoulas.com',social:'https://www.instagram.com/goldcoastdoulas\nhttps://www.facebook.com/goldcoastdoulas',email:'kristin@goldcoastdoulas.com',virtual:'yes',resources:'https://www.supportedbook.com/'},
+  {tier:'featured',name:'Lissette Keslinke, CSC',creds:'Certified Pediatric Sleep Consultant',tagline:'Helping families worldwide create healthy, independent sleep habits for their little ones.',bio:'Based in the Chicago suburbs, I support families all over the world in creating healthy, independent sleep habits that actually last.\n\nAfter walking through the sleep training journey myself, I know firsthand how overwhelming and emotional sleep struggles can feel.\n\nI combine evidence-based sleep strategies with a supportive, personalized approach so families feel confident, not confused.',category:'Infant & Child Development',specialty:'Sleep Consultant',location:'Chicago Suburbs, IL',website:'https://sleepwiseconsulting.com/consultants/lissette-keslinke/',social:'https://www.instagram.com/lissetteatsleepwise/',email:'lkeslinke@sleepwiseconsulting.com',virtual:'yes',resources:'https://sleepwiseconsulting.as.me/schedule.php?calendarID=12699908&appointmentType=10697039'},
+  {tier:'featured',name:'Kate Littlefield, LCMHC',creds:'MS, LCMHC, EMDR, Child-Parent Psychotherapy, PMH-C',tagline:'Seasoned mental health professional focusing on all things family.',bio:'Kate Littlefield is a Licensed Clinical Mental Health Counselor with nearly 20 years of experience working with children, youth, families and individuals in a variety of settings.\n\nShe is the Chair of the Postpartum Support International Vermont Chapter Board of Directors and is a Policy Center for Maternal Mental Health Fellow.\n\nCurrently, Kate runs a small therapy practice in Vermont specializing in working with parents and families.',category:'Mental & Emotional Health',specialty:'Licensed Clinical Mental Health Counselor (LCMHC)',location:'Essex, VT',website:'https://www.throughtothrive.org',social:'@through_to_thrive',email:'kate@throughtothrive.org',virtual:'yes',resources:'https://www.throughtothrive.org'},
+  {tier:'featured',name:'Laura-Marie Small',creds:'Masters in Art Education',tagline:'Art Education gave me a voice when words were hard — now I use it to help children find theirs.',bio:'Laura-Marie Small, lovingly known as Ms. Laura, is an artist, educator, and creative entrepreneur who has spent nearly three decades helping children build confidence through creativity.\n\nShe founded Kidcasso Art Studio in 2007 with a simple but powerful mission: to help children See Art, Create Art, and Love Art.\n\nAs a child with a language-based learning disability, art became her way of understanding the world and building confidence.',category:'Other',specialty:'Art Educator',location:'Wakefield, MA',website:'https://www.kidcassoart.com',social:'@kidcasso1',email:'laura@kidcassoart.com',virtual:'yes'},
+  {tier:'featured',name:'Kirti Patel, MD',creds:'OB-GYN and Podcast Host',tagline:'Board-certified gynecologist with over 25 years of experience and host of The Gynarchy podcast.',bio:'Dr. Kirti Patel is a board-certified gynecologist with over 25 years of experience and creator/host of The Gynarchy, a podcast at the intersection of women\'s health and feminism.\n\nDr. Patel\'s mission is to break down barriers of misinformation and stigma that often surround women\'s health issues and to inspire and empower women to take control of their health.\n\nShe has written articles for various media publications and takes speaking engagements.',category:'Medical & Clinical',specialty:'OB-GYN',website:'https://www.thegynarchypodcast.com',social:'https://www.instagram.com/thegynarchy/',email:'kirti@thegynarchypodcast.com',virtual:'no',resources:'https://www.thegynarchypodcast.com'},
+  {tier:'featured',name:'Michelle Young, LAc',creds:'Licensed Acupuncturist, Board-Certified Herbalist, Doula',tagline:'Combining knowledge with intuition to heal the whole person — mind, body and spirit.',bio:'Michelle Young is a licensed acupuncturist, Chinese medical herbalist and founder of Alchemy Acupuncture & Herbs. She graduated from the Midwest College of Oriental Medicine in 2008.\n\nWomen\'s health is of special interest to Michelle, as she helps women conceive both naturally and in conjunction with reproductive technology.\n\nShe has been a doula since February 2012, offering various forms of labor support including acupuncture for pain relief and turning breech babies.',category:'Medical & Clinical',specialty:'Acupuncturist, Doula',location:'Chicago, IL',website:'https://alchemyacuherbs.com/',social:'https://www.instagram.com/alchemyacuherbs/',email:'michelle@alchemyacuherbs.com',virtual:'yes'},
+  {tier:'essential',name:'Piper Benjamin',creds:'LCSW, PMH-C',tagline:'Mental health therapist specialized in supporting families navigate pregnancy, postpartum, and parenting.',bio:'Therapist licensed in Illinois, specializing in anxiety, depression & perinatal mental health. My goal is to create a safe, supportive space where clients can explore their challenges, build resilience, and achieve lasting well-being.\n\nMy therapeutic approach is rooted in client-centered care, utilizing evidence-based therapies such as CBT, DBT, Motivational Interviewing, and ACT.\n\nI tailor each session to your unique goals.',category:'Mental & Emotional Health',specialty:'Perinatal & Postpartum Mental Health Certified',website:'https://www.lakeshoretherapygroup.com',social:'https://www.instagram.com/lakeshoretherapygroup',email:'Piper@lakeshoretherapygroup.com',virtual:'yes'},
+  {tier:'essential',name:'Heloise Stauff',creds:'Certified Educator of Infant Massage, CEIM',tagline:'Promoting infant health and family connection through infant massage.',bio:'Heloise is a Certified Infant Massage Educator with Infant Massage USA (since 2019), with advanced training in child development and body-based therapeutic approaches.\n\nSince 2018, she has also worked as a teacher with the Park District of Oak Park, leading developmental classes for children ages 0-6 and their parents.\n\nHer professional experience spans over 15 years working with children of all ages and supporting families.',category:'Infant & Child Development',specialty:'Infant Massage Educator',website:'https://www.snugglystart.com',social:'https://www.instagram.com/snugglystart',email:'heloise.stauff@hotmail.com',location:'Oak Park, IL',virtual:'no'},
+  {tier:'essential',name:'Ashley Lakin',creds:'Ashley Lakin, MS, CNS, LDN',tagline:'Integrative nutritionist specializing in hormonal health across all life stages.',bio:'I am especially passionate about working with individuals through all phases of life to address hormonal concerns, such as infertility, menopause, PCOS, endometriosis, and postpartum mood disorders.\n\nAs a Certified Nutrition Specialist and Licensed Dietitian Nutritionist, I draw on my integrated education and training to uncover and address the root causes of your symptoms.\n\nMy practice is HAES-aligned and LGBTQIA-friendly.',category:'Feeding & Nutrition',specialty:'Perinatal Nutritionist, Integrative/Hormonal Nutritionist',website:'https://www.ashleylakinnutrition.com/',social:'Instagram: @ashleylakinnutrition',email:'info@ashleylakinnutrition.com',virtual:'yes'},
+  {tier:'essential',name:'Brittnei Gaudio',creds:'Professional Organizer, Decluttering Coach & Home Care Expert',tagline:'Creating easy to tidy homes and seamlessly managed family lives at wellnested living Co.',bio:'Brittnei Gaudio is the owner of wellnested living Co., a professional organizing, decluttering and home management company that helps busy parents and professionals create homes that feel lighter, more intentional, and easy to tidy.\n\nShe loves blending strategy with heart, curating spaces that don\'t just look tidy but actually function for real families with real lives.',category:'Whole Family & Systems Support',specialty:'Professional Organizer (Family / Postpartum)',website:'https://www.wellnestedliving.ca/',social:'https://www.instagram.com/well.nested.living/',email:'hello@wellnestedliving.ca',virtual:'yes',resources:'https://www.wellnestedliving.ca/'},
+  {tier:'essential',name:'Briana Oden',creds:'Full-Spectrum Doula',tagline:'Fighting for birth justice, one client at a time.',bio:'Hi, I\'m Bri! A full-spectrum doula with over 3.5 years of professional experience and more than a decade of supporting families through pregnancy, birth, and postpartum.\n\nI\'m dedicated to educating, advocating, and providing emotional and physical care to help families feel confident and empowered.\n\nI\'m an Illinois Medicaid Certified doula & abortion companion as well.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula, Birth Advocate/Perinatal Advocate',website:'https://doulamatch.net/profile/34030/briana-oden',email:'Brianaoden@gmail.com',virtual:'no'},
+  {tier:'essential',name:'Anne Nicholson Weber',creds:'JD, Founder BirthGuide Chicago',tagline:'Helping families build their circle of support in the childbearing year.',bio:'Anne Nicholson Weber, JD, is the mother of three, grandmother of four, and a former childbirth educator and doula.\n\nThe site offers directories of Chicago-area hospitals, birth centers, home birth midwives, and complementary perinatal providers, along with clear, structured guidance on how to evaluate options and build a support team.\n\nShe has also been a litigator, teacher, author and journalist.',category:'Pregnancy, Birth & Postpartum',specialty:'Birth Advocate/Perinatal Advocate',location:'Evanston, IL',website:'https://birthguidechicago.com/',email:'anne@birthguidechicago.com',virtual:'no'},
+  {tier:'featured',name:'Alisha Alli, CLD, CPD, CLC',creds:'Certified Birth & Postpartum Doula, Certified Life Coach',tagline:'A mom of 4 who wants everyone to feel like royalty through their birth and postpartum journey!',bio:'With a passion for uplifting expectant mothers and their families, I have been a dedicated Birth and Postpartum Doula since 2010.\n\nI have supported numerous families through various birthing experiences, including hospital births, home births, IVF, Surrogacy and closed and open adoptions.\n\nBeing a certified life coach for five years has gifted me with the skills to help families navigate through postpartum, new routines, and change.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula, Birth Advocate/Perinatal Advocate',location:'New York, NY',website:'https://birthwithfierceroyaltyservices.com',email:'Alisha.86.alli@gmail.com',virtual:'yes'}
+];
+
+function buildCard(m){
+  var div=document.createElement('div');
+  div.className='card'+(m.tier==='featured'?' featured':'');
+  var cc=catColor(m.category);
+  var bg=avatarBg(m.name);
+  var photoHtml=m.photo
+    ?'<img class="card-photo-img" src="'+m.photo+'" alt="'+m.name+'" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"/><div class="card-photo-initials" style="display:none;background:linear-gradient(135deg,'+bg+'44,'+bg+'11);color:'+bg+';">'+initials(m.name)+'</div>'
+    :'<div class="card-photo-initials" style="background:linear-gradient(135deg,'+bg+'44,'+bg+'11);color:'+bg+';">'+initials(m.name)+'</div>';
+  var specs=toArr(m.specialty);
+  var specTags=specs.slice(0,2).map(function(t){return'<span class="tag tag-spec">'+t+'</span>';}).join('');
+  var virtTag=m.virtual?'<span class="tag '+(m.virtual==='yes'?'tag-virtual-yes':'tag-virtual-no')+'">'+(m.virtual==='yes'?'Virtual ✓':'In-Person')+'</span>':'';
+  var locUrl='https://www.google.com/maps/search/'+encodeURIComponent(m.location);
+var locPill=m.location?'<a class="meta-pill" href="'+locUrl+'" target="_blank" onclick="event.stopPropagation()" style="text-decoration:none;">📍 '+m.location+'</a>':'';
+  var resLink=m.resources?'<a class="card-res-btn" href="'+m.resources+'" target="_blank" onclick="event.stopPropagation()">📎 Resources</a>':'';
+  div.innerHTML=
+    '<div class="card-photo">'+photoHtml
+    +(m.tier==='featured'?'<div class="featured-star">★</div>':'')
+    +'<div class="card-cat-bar" style="background:'+cc.color+';"></div></div>'
+    +'<div class="card-body">'
+      +'<div class="card-cat-line" style="background:'+cc.color+';"></div>'
+      +'<div class="card-name">'+m.name+'</div>'
+      +(m.creds?'<div class="card-creds" style="color:'+cc.color+';">'+m.creds+'</div>':'')
+      +(m.tagline?'<div class="card-tagline">'+m.tagline+'</div>':'')
+      +((specTags||virtTag)?'<div class="card-tags">'+specTags+virtTag+'</div>':'')
+      +'<div class="card-footer">'+locPill+resLink
+        +'<div class="card-action-btns"><div class="icon-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M6 5v4M6 4h.01" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div></div>'
+      +'</div></div>';
+  div.addEventListener('click',function(){openModal(m);});
+  return div;
+}
+
+function openModal(m){
+  var cc=catColor(m.category);
+  var logoBg=document.getElementById('m-logo-bg');
+  var logoDisplay=document.getElementById('m-logo-display');
+  if(m.logo){logoBg.style.backgroundImage='url(\''+m.logo+'\')';logoBg.style.background='';logoDisplay.src=m.logo;logoDisplay.style.display='block';}
+  else{logoBg.style.backgroundImage='none';logoBg.style.background='linear-gradient(135deg,'+avatarBg(m.name)+'55,'+avatarBg(m.name)+'11)';logoDisplay.style.display='none';}
+  document.getElementById('m-feat').innerHTML=m.tier==='featured'?'<div class="modal-feat-badge">★ Featured Expert</div>':'';
+  document.getElementById('m-cat-line').style.background=cc.color;
+  document.getElementById('m-name').textContent=m.name;
+  document.getElementById('m-creds').textContent=m.creds||'';
+  document.getElementById('m-tagline').textContent=m.tagline||'';
+  document.getElementById('m-bio').textContent=m.bio||'';
+  document.getElementById('m-bio-sec').style.display=m.bio?'':'none';
+  var cats=m.category?[m.category]:[];
+  document.getElementById('m-cat').innerHTML=cats.map(function(t){return'<span class="tag" style="background:'+catColor(t).pale+';color:'+catColor(t).text+';">'+t+'</span>';}).join('');
+  document.getElementById('m-cat-sec').style.display=cats.length?'':'none';
+  var specs=toArr(m.specialty);
+  document.getElementById('m-spec').innerHTML=specs.map(function(t){return'<span class="tag tag-spec">'+t+'</span>';}).join('');
+  document.getElementById('m-spec-sec').style.display=specs.length?'':'none';
+  var details=[];
+  if(m.location)details.push('<a class="mpill" href="https://www.google.com/maps/search/'+encodeURIComponent(m.location)+'" target="_blank">📍 '+m.location+'</a>');
+  if(m.virtual)details.push('<span class="mpill '+(m.virtual==='yes'?'tag-virtual-yes':'tag-virtual-no')+'">'+(m.virtual==='yes'?'✓ Accepts Virtual Appointments':'In-Person Only')+'</span>');
+  document.getElementById('m-details').innerHTML=details.join('');
+  document.getElementById('m-details-sec').style.display=details.length?'':'none';
+  var links=[];
+  if(m.website){var ws=m.website.trim();links.push('<a class="mpill" href="'+(ws.indexOf('http')===0?ws:'https://'+ws)+'" target="_blank">🌐 Website</a>');}
+  if(m.social){String(m.social).split(/[\n,]/).map(function(s){return s.trim();}).filter(function(s){return s.indexOf('http')===0;}).forEach(function(u){
+    var label='Link';
+    if(u.indexOf('instagram')>-1)label='Instagram';
+    else if(u.indexOf('linkedin')>-1)label='LinkedIn';
+    else if(u.indexOf('facebook')>-1)label='Facebook';
+    else if(u.indexOf('youtube')>-1)label='YouTube';
+    else if(u.indexOf('tiktok')>-1)label='TikTok';
+    links.push('<a class="mpill" href="'+u+'" target="_blank">'+label+'</a>');
+  });}
+  document.getElementById('m-links').innerHTML=links.join('');
+  document.getElementById('m-links-sec').style.display=links.length?'':'none';
+  // Resources button - show only if member has resources
+  var resBtn=document.getElementById('m-resources-btn');
+  if(m.resources){
+    resBtn.style.display='';
+    resBtn.onclick=function(){window.open(m.resources,'_blank');};
+  } else {
+    resBtn.style.display='none';
+  }
+  // Email button
+  document.getElementById('m-email').style.display=m.email?'':'none';
+  document.getElementById('m-email').onclick=function(){if(m.email)window.open('mailto:'+m.email);};
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('mclose').addEventListener('click',closeModal);
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===document.getElementById('overlay'))closeModal();});
+
+function buildLegend(){
+  var legend=document.getElementById('cat-legend');
+  legend.innerHTML='';
+  Object.keys(CAT_COLORS).forEach(function(cat){
+    var cc=CAT_COLORS[cat];
+    var item=document.createElement('div');
+    item.className='cat-legend-item';
+    item.innerHTML='<div class="cat-legend-dot" style="background:'+cc.color+';"></div>'+cat;
+    item.addEventListener('click',function(){
+      var sel=document.getElementById('f-category');
+      sel.value=sel.value===cat?'':cat;
+      filterAndRender();
+    });
+    legend.appendChild(item);
+  });
+}
+
+function populateFilters(){
+  var specs={},locs={};
+  MEMBERS.forEach(function(m){
+    toArr(m.specialty).forEach(function(s){specs[s]=1;});
+    if(m.location)locs[m.location]=1;
+  });
+  var cSel=document.getElementById('f-category');
+  var sSel=document.getElementById('f-specialty');
+  var lSel=document.getElementById('f-location');
+  cSel.innerHTML='<option value="">All Categories</option>';
+  sSel.innerHTML='<option value="">All Specialties</option>';
+  lSel.innerHTML='<option value="">All Locations</option>';
+  Object.keys(CAT_COLORS).forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;cSel.appendChild(o);});
+  Object.keys(specs).sort().forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;sSel.appendChild(o);});
+  Object.keys(locs).sort().forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;lSel.appendChild(o);});
+}
+
+function filterAndRender(){
+  var q=document.getElementById('search').value.toLowerCase();
+  var fCat=document.getElementById('f-category').value;
+  var fSpec=document.getElementById('f-specialty').value;
+  var fLoc=document.getElementById('f-location').value;
+  var fVirt=document.getElementById('f-virtual').value;
+  // Sort featured first, then essential
+  MEMBERS.sort(function(a,b){
+    if(a.tier==='featured'&&b.tier!=='featured') return -1;
+    if(a.tier!=='featured'&&b.tier==='featured') return 1;
+    return 0;
+  });
+  var filtered=MEMBERS.filter(function(m){
+    if(fCat&&m.category!==fCat)return false;
+    if(fSpec&&toArr(m.specialty).indexOf(fSpec)===-1)return false;
+    if(fLoc&&m.location!==fLoc)return false;
+    if(fVirt&&m.virtual!==fVirt)return false;
+    if(q){var hay=[m.name,m.bio,m.tagline,m.creds,m.category,m.specialty,m.location].filter(Boolean).join(' ').toLowerCase();if(hay.indexOf(q)===-1)return false;}
+    return true;
+  });
+  var grid=document.getElementById('grid');
+  grid.innerHTML='';
+  if(!filtered.length){grid.innerHTML='<div class="state-box"><h3>No results found</h3><p>Try adjusting your search or filters</p></div>';return;}
+  filtered.forEach(function(m,i){var card=buildCard(m);card.style.animationDelay=(i*0.04)+'s';grid.appendChild(card);});
+}
+
+document.getElementById('btn-grid').addEventListener('click',function(){listMode=false;document.getElementById('grid').classList.remove('list-mode');document.getElementById('btn-grid').classList.add('active');document.getElementById('btn-list').classList.remove('active');});
+document.getElementById('btn-list').addEventListener('click',function(){listMode=true;document.getElementById('grid').classList.add('list-mode');document.getElementById('btn-list').classList.add('active');document.getElementById('btn-grid').classList.remove('active');});
+['search','f-category','f-specialty','f-location','f-virtual'].forEach(function(id){document.getElementById(id).addEventListener('input',filterAndRender);document.getElementById(id).addEventListener('change',filterAndRender);});
+
+buildLegend();
+populateFilters();
+filterAndRender();
+
+// ── LIVE PHOTO + LOGO FETCH FROM AIRTABLE (via Cloudflare Worker) ──
+(function(){
+  var WORKER = 'https://curly-wind-dfab.mona-372.workers.dev/';
+
+  function getPhoto(fields){
+    var keys=['Headshot','Photo','Profile Photo','Profile Image'];
+    for(var i=0;i<keys.length;i++){
+      var a=fields[keys[i]];
+      if(Array.isArray(a)&&a.length) return a[0].url;
+    }
+    return null;
+  }
+  function getRecordName(fields){
+    return (fields['Full Name']||fields['Name']||fields['Profile Display name']||'').trim();
+  }
+
+  function getLogo(fields){
+    var keys=['Logo','Company Logo','Brand Logo','logo'];
+    for(var i=0;i<keys.length;i++){
+      var a=fields[keys[i]];
+      if(Array.isArray(a)&&a.length){
+        var img=a.find(function(f){return/\.(png|jpg|jpeg|webp|gif)/i.test(f.filename||'');});
+        return (img||a[0]).url;
+      }
+    }
+    return null;
+  }
+
+  function fetchTable(table){
+    return fetch(WORKER+'?table='+encodeURIComponent(table))
+      .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+      .then(function(d){return d.records||[];});
+  }
+
+  function getResource(fields){
+    // Try attachment array first
+    var resFields=['Resources','Resources/Useful Links','Useful links','Useful Links'];
+    for(var i=0;i<resFields.length;i++){
+      var v=fields[resFields[i]];
+      if(!v) continue;
+      if(Array.isArray(v)&&v.length&&v[0].url) return v[0].url;
+      if(typeof v==='string'&&v.trim()) return v.trim();
+    }
+    return null;
+  }
+
+  function applyImages(records){
+    var updated=false;
+    records.forEach(function(rec){
+      var recName=getRecordName(rec.fields).toLowerCase();
+      var photo=getPhoto(rec.fields);
+      var logo=getLogo(rec.fields);
+      var resource=getResource(rec.fields);
+      if(!photo&&!logo&&!resource) return;
+      MEMBERS.forEach(function(m){
+        var mName=m.name.trim().toLowerCase();
+        var recFirst=recName.split(' ')[0];
+        var mFirst=mName.split(' ')[0];
+        var recSecond=recName.split(' ')[1]||'';
+        var mSecond=mName.split(' ')[1]||'';
+        if(mName===recName||(recFirst===mFirst&&recSecond&&mSecond&&recSecond===mSecond)){
+          if(photo&&!m.photo){m.photo=photo;updated=true;}
+          if(logo&&!m.logo){m.logo=logo;updated=true;}
+          if(resource&&!m.resources){m.resources=resource;updated=true;}
+        }
+      });
+    });
+    if(updated){
+      filterAndRender();
+    }
+  }
+
+  // Fetch from both tables
+  Promise.all([
+    fetchTable('Featured Members Bios'),
+    fetchTable('Essential Members Bios')
+  ]).then(function(results){
+    applyImages(results[0].concat(results[1]));
+  }).catch(function(e){
+    console.log('Could not load photos:',e.message);
+  });
+})();
+
+// ── CATEGORY CYCLE ANIMATION ──
+(function(){
+  var words = document.querySelectorAll('.hero-cycle-word');
+  if(!words.length) return;
+  var current = 0;
+  setInterval(function(){
+    words[current].classList.add('exit');
+    words[current].classList.remove('active');
+    setTimeout(function(){
+      words[current].classList.remove('exit');
+      current = (current + 1) % words.length;
+      words[current].classList.add('active');
+    }, 420);
+  }, 2200);
+})();
+</script>
+</body>
+</html>
