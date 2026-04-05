@@ -383,6 +383,20 @@ var MEMBERS = [
   {tier:'featured',name:'Alisha Alli, CLD, CPD, CLC',creds:'Certified Birth & Postpartum Doula, Certified Life Coach',tagline:'A mom of 4 who wants everyone to feel like royalty through their birth and postpartum journey!',bio:'With a passion for uplifting expectant mothers and their families, I have been a dedicated Birth and Postpartum Doula since 2010.\n\nI have supported numerous families through various birthing experiences, including hospital births, home births, IVF, Surrogacy and closed and open adoptions.\n\nBeing a certified life coach for five years has gifted me with the skills to help families navigate through postpartum, new routines, and change.',category:'Pregnancy, Birth & Postpartum',specialty:'Doula, Birth Advocate/Perinatal Advocate',location:'New York, NY',website:'https://birthwithfierceroyaltyservices.com',email:'Alisha.86.alli@gmail.com',virtual:'yes'}
 ];
 
+// Deduplicate: if same email exists in both Featured and Essential, keep only Featured
+(function(){
+  var seen={};
+  // First pass: collect featured emails
+  MEMBERS.forEach(function(m){
+    if(m.tier==='featured'&&m.email){seen[m.email.toLowerCase()]=true;}
+  });
+  // Second pass: remove essential members whose email already appears in featured
+  MEMBERS=MEMBERS.filter(function(m){
+    if(m.tier!=='featured'&&m.email&&seen[m.email.toLowerCase()])return false;
+    return true;
+  });
+})();
+
 function buildCard(m){
   var div=document.createElement('div');
   div.className='card'+(m.tier==='featured'?' featured':'');
